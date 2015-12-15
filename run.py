@@ -3,7 +3,7 @@
 
 # If called directly execute the algorithm for an example.
 if __name__ == '__main__':
-  from node import Node
+  from algorithm.node import Node
   from algorithm import Algorithm
 
   # Print message.
