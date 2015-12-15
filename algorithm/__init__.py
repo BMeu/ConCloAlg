@@ -1,48 +1,58 @@
 # -*- coding: utf-8 -*-
 
-import sys
 from node import Node
 
+
 class Algorithm(object):
-  ''' The implementation of the congruence closure algorithm. '''
+    """
+        The implementation of the congruence closure algorithm.
+    """
 
-  # ____________________________________________________________________________
-  def __init__(self, merge_list = [], inequality_list = [], atom_list = [], \
-               out = sys.stdout):
-    ''' Initialize this class and set the output. '''
-    self.out = out
-    self.merge_list = merge_list
-    self.inequality_list= inequality_list
-    self.atom_list = []
 
-  # ____________________________________________________________________________
-  def merge_nodes(self):
-    ''' Merge all nodes in the merge list. '''
-    for tuple in self.merge_list:
-      node1, node2 = tuple
-      self.merge(node1, node2)
+    def __init__(self, merge_list = None, inequality_list = None):
+        """
+            Initialize this class.
 
-  # ____________________________________________________________________________
-  def check_satisfiability(self, indent = ''):
-    ''' Check the inequality and atom lists for contradictions. '''
+            :type merge_list: list[(Node, Node)]
+            :type inequality_list: list[(Node, Node)]
+        """
 
-    # Check the inequality list.
-    for tuple in self.inequality_list:
-      node1, node2 = tuple
-      if node1.find_representative() == node2.find_representative():
-        self.out.write('{0}FIND({1!s}) = {2!s} = FIND({3!s})\n' \
-                       .format(indent, node1, node1.find_representative(),
-                               node2))
-        return False
+        if not merge_list:
+            self.merge_list = []
+        else:
+            self.merge_list = merge_list
 
-      # Fine for now, just print a message
-      self.out.write('{0}FIND({1!s}) = {2!s} != FIND({3!s}) = {4!s}\n' \
-                     .format(indent, node1, node1.find_representative(),
-                             node2, node2.find_representative()))
+        if not inequality_list:
+            self.inequality_list = []
+        else:
+            self.inequality_list = inequality_list
 
-    # TODO: Implement.
-    for tuple in self.atom_list:
-      node1, node2 = tuple
 
-    # No contradictions found.
-    return True
+    def merge_nodes(self):
+        """
+            Merge all nodes in the merge list.
+        """
+
+        for mergees in self.merge_list:
+            node1, node2 = mergees
+            node1.merge(node2)
+
+
+    def check_satisfiability(self):
+        """
+            Check the inequality and atom lists for contradictions.
+
+            :rtype: bool
+        """
+
+        # Check the inequality list.
+        for inequality in self.inequality_list:
+            node1, node2 = inequality
+            if node1.get_class_representative() == \
+               node2.get_class_representative():
+                return False
+
+        # TODO: Implement checking atoms for T_cons.
+
+        # No contradictions found.
+        return True
