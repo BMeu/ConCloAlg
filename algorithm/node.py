@@ -8,8 +8,7 @@ class Node(object):
     """
 
     # Each node object will have a unique ID. The value will be incremented
-    # by the
-    # constructor to keep the ID unique.
+    # by the constructor to keep the ID unique.
     __last_ID = 0
 
 
@@ -17,23 +16,24 @@ class Node(object):
         """
             Initialize the node.
 
+            :type name: basestring
             :type arguments: list[Node]
         """
 
         Node.__last_ID += 1
 
-        self._id = Node.__last_ID  # Int
-        self._fn = name  # String
-        self._find = self  # Node
-        self._ccpar = set()  # Set
+        self._id = Node.__last_ID   # int
+        self._name = name           # basestring
+        self._find = self           # Node
+        self._parents = set()       # set(Node)
 
-        if arguments is None:  # List
-            self._args = []
+        if arguments is None:       # list[Node]
+            self._arguments = []
         else:
-            self._args = arguments
+            self._arguments = arguments
 
         # Set this node as the parent for all arguments.
-        for argument in self._args:
+        for argument in self._arguments:
             argument.add_single_parent(self)
 
 
@@ -42,8 +42,7 @@ class Node(object):
         """
             :rtype: str
         """
-
-        return self._fn
+        return self._name
 
 
     @property
@@ -51,8 +50,7 @@ class Node(object):
         """
             :rtype: list[Node]
         """
-
-        return self._args
+        return self._arguments
 
 
     @property
@@ -60,7 +58,6 @@ class Node(object):
         """
             :rtype: Node
         """
-
         return self._find
 
 
@@ -69,7 +66,6 @@ class Node(object):
         """
             :type value: Node
         """
-
         self._find = value
 
 
@@ -78,7 +74,7 @@ class Node(object):
         """
             :rtype: set(Node)
         """
-        return self._ccpar
+        return self._parents
 
 
     @parents.setter
@@ -86,7 +82,7 @@ class Node(object):
         """
             :type value: set(Node)
         """
-        self._ccpar = value
+        self._parents = value
 
 
     def add_single_parent(self, parent):
@@ -95,8 +91,7 @@ class Node(object):
 
             :type parent: Node
         """
-
-        self._ccpar.add(parent)
+        self._parents.add(parent)
 
 
     def get_class_representative(self):
@@ -106,7 +101,9 @@ class Node(object):
             :rtype: Node
         """
 
-        if self._find == self:
+        # Check for identity. Equality results in false behaviour since the
+        # equality comparison is overwritten for this class.
+        if self._find is self:
             return self
 
         return self._find.get_class_representative()
@@ -235,4 +232,4 @@ class Node(object):
         """
             :rtype: str
         """
-        return '{0!s}:{1}'.format(self._id, self._fn)
+        return '{0!s}:{1}'.format(self._id, self._name)
