@@ -5,10 +5,6 @@ from algorithm.node import Node
 
 
 class TestNode(unittest.TestCase):
-    """
-        A collection of tests for the entire Node class.
-    """
-
 
     def test_init(self):
         node1 = Node('f')

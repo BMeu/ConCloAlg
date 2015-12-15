@@ -41,7 +41,7 @@ print('\n\nCoverage Report:\n')
 cov.report()
 
 # Save the report as HTML.
-basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+basedir = os.path.abspath(os.path.dirname(__file__))
 report_path = 'htmlcov'
 cov.html_report(directory = report_path)
 print('HTML version: ' + os.path.join(basedir, report_path + '/index.html'))
