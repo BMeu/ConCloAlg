@@ -103,7 +103,7 @@ class Node(object):
 
         # Check for identity. Equality results in false behaviour since the
         # equality comparison is overwritten for this class.
-        if self._find is self:
+        if self._find == self:
             return self
 
         return self._find.get_class_representative()
@@ -144,7 +144,8 @@ class Node(object):
         """
 
         # The two nodes must not already be congruent to each other.
-        if self.get_class_representative() == other.get_class_representative():
+        if self.get_class_representative().is_congruent(
+                other.get_class_representative()):
             return False
 
         # Save the parents temporarily because they will be overwritten
@@ -163,17 +164,17 @@ class Node(object):
             # If the two nodes have the same representative, continue with
             # the next
             # tuple.
-            if p1.get_class_representative() == p2.get_class_representative():
+            if p1.get_class_representative() is p2.get_class_representative():
                 continue
 
             # If both nodes are congruent, merge them.
-            if p1 == p2:
+            if p1.is_congruent(p2):
                 p1.merge(p2)
 
         return True
 
 
-    def __eq__(self, other):
+    def is_congruent(self, other):
         """
             Return True if two nodes are equal to each other. They are
             considered equal if their function names match, they have the
@@ -197,24 +198,13 @@ class Node(object):
         # arguments in the second node.
         number_of_arguments = len(self.arguments)
         for n in range(0, number_of_arguments):
-            arg1 = self.arguments[n]
-            arg2 = other.arguments[n]
+            rep1 = self.arguments[n].get_class_representative()
+            rep2 = other.arguments[n].get_class_representative()
 
-            if arg1.get_class_representative() != \
-                    arg2.get_class_representative():
+            if rep1 == rep2:
                 return False
 
         return True
-
-
-    def __ne__(self, other):
-        """
-            Return False if two nodes are equal to each other.
-
-            :type other: Node
-            :rtype: bool
-        """
-        return not self.__eq__(other)
 
 
     def add_argument(self, argument):

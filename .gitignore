@@ -1,5 +1,7 @@
 # Unit test / coverage reports
 htmlcov/
 
+.pyc
+
 # PyCharm
 .idea

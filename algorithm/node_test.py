@@ -117,11 +117,11 @@ class TestNode(unittest.TestCase):
         self.assertEqual(node3.parents, set())
         self.assertEqual(node4.parents, set())
         self.assertEqual(node5.parents, set())
-        self.assertEqual(node1.find, node2)
-        self.assertEqual(node2.find, node2)
-        self.assertEqual(node3.find, node2)
-        self.assertEqual(node4.find, node2)
-        self.assertEqual(node5.find, node2)
+        self.assertIs(node1.find, node2)
+        self.assertIs(node2.find, node2)
+        self.assertIs(node3.find, node2)
+        self.assertIs(node4.find, node2)
+        self.assertIs(node5.find, node2)
 
 
     def test_merge(self):
@@ -141,7 +141,7 @@ class TestNode(unittest.TestCase):
 
         # Now node 2 should be the representative.
         self.assertEqual(node1.parents, set())
-        self.assertEqual(node1.find, node2)
+        self.assertIs(node1.find, node2)
         self.assertEqual(node2.parents, {node1, node3, node4})
         self.assertEqual(node2.find, node2)
         self.assertEqual(node3.parents, set())
@@ -169,17 +169,17 @@ class TestNode(unittest.TestCase):
         node5.add_argument(node2)
 
         # Nodes 1 and 2 should be equal to each other.
-        self.assertEqual(node1, node2)
+        self.assertTrue(node1.is_congruent(node2))
 
         # Nodes 1 and 3 are not equal because their function names differ.
-        self.assertNotEqual(node1, node3)
+        self.assertFalse(node1.is_congruent(node3))
 
         # Nodes 1 and 4 are not equal because they do not have the same number
         # of arguments.
-        self.assertNotEqual(node1, node4)
+        self.assertFalse(node1.is_congruent(node4))
 
         # Nodes 4 and 5 are not equal because their arguments are not congruent.
-        self.assertNotEqual(node4, node5)
+        self.assertFalse(node4.is_congruent(node5))
 
 
     def test_add_argument(self):
